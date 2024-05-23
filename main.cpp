@@ -14,17 +14,41 @@ int getMinValue(vector<int>& mat, int f, int c, function<int(char,char)> energy,
 int energyFunction1(char ri, char rj);
 int energyFunction2(char ri, char rj);
 void printMatrix(vector<int>& mat);
+vector<pair<int,int>> calculatePath(vector<int>mat,vector<vector<pair<int,int>>>mat2);
+void printPath(vector<pair<int,int>>path, string cadena);
 
 string cadena;
 int main(){
-    cadena = "GGAAAUCC";
+    //cadena = "GGAAAUCC";
+    cadena = "ACUCGAUUCCGAG";
     vector<int> mainMatrix = vector<int>(cadena.length()*cadena.length(),100);
     vector<vector<pair<int,int>>> precedArrowMatrix = vector<vector<pair<int,int>>>
                                 (cadena.length()*cadena.length(),vector<pair<int,int>>());
     initializeMatrix(mainMatrix);
-    printMatrix(mainMatrix);
     calculate(mainMatrix, precedArrowMatrix);
     printMatrix(mainMatrix);
+    //auto path = calculatePath(mainMatrix,precedArrowMatrix);
+    //printPath(path, cadena);
+}
+void printPath(vector<pair<int,int>>path, string cadena){
+    for(auto& i : path){
+        cout << cadena[i.first] <<"--" << cadena[i.second] << endl;
+        cout << "|" << "  "<<"|"<<endl;
+    }
+    cout << "\\__/";
+    cout << endl;
+}
+vector<pair<int,int>> calculatePath(vector<int>mat,vector<vector<pair<int,int>>>mat2){
+    int size = sqrt(mat.size());
+    vector<pair<int,int>> path;
+    pair<int,int> initialPos = make_pair(0,size-1);
+    path.push_back(initialPos);
+    while(initialPos.first < initialPos.second){
+        auto next= mat2[size*initialPos.first+initialPos.second][0];
+        path.push_back(next);
+        initialPos = next;
+    }
+    return path;
 }
 int getMinValue(vector<int>& mat, int f, int c, function<int(char,char)> energy,
                  char ri, char rj, vector<pair<int,int>>& mincoords){
@@ -58,6 +82,8 @@ int getMinValue(vector<int>& mat, int f, int c, function<int(char,char)> energy,
         mincoords.emplace_back(f,f+k);
         mincoords.emplace_back(f+k+f,c);
     }
+    else{
+        cout << "error al calcular casilla previa\n";}
     return *m;
 }
 void calculate(vector<int>& mat,  vector<vector<pair<int,int>>>& mat2){
