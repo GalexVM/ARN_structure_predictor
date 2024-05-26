@@ -19,16 +19,17 @@ void printPath(vector<pair<int,int>>path, string cadena);
 
 string cadena;
 int main(){
-    //cadena = "GGAAAUCC";
-    cadena = "ACUCGAUUCCGAG";
+    cadena = "GGAAAUCC";
+    //cadena = "ACUCGAUUCCGAG";
     vector<int> mainMatrix = vector<int>(cadena.length()*cadena.length(),100);
     vector<vector<pair<int,int>>> precedArrowMatrix = vector<vector<pair<int,int>>>
                                 (cadena.length()*cadena.length(),vector<pair<int,int>>());
     initializeMatrix(mainMatrix);
+    printMatrix(mainMatrix);
     calculate(mainMatrix, precedArrowMatrix);
     printMatrix(mainMatrix);
-    //auto path = calculatePath(mainMatrix,precedArrowMatrix);
-    //printPath(path, cadena);
+    auto path = calculatePath(mainMatrix,precedArrowMatrix);
+    printPath(path, cadena);
 }
 void printPath(vector<pair<int,int>>path, string cadena){
     for(auto& i : path){
@@ -78,7 +79,7 @@ int getMinValue(vector<int>& mat, int f, int c, function<int(char,char)> energy,
         mincoords.emplace_back(f+1,c);}
     else if(m == values.begin()){
         mincoords.emplace_back(f+1,c-1);}
-    else if(m == values.end() && values.end() != values.begin()+2){
+    else if(m == (values.end()-1) && (values.end()-1) != values.begin()+2){
         mincoords.emplace_back(f,f+k);
         mincoords.emplace_back(f+k+f,c);
     }
